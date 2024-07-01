@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mysql:
+    image: 'mysql'
+    restart: 'always'
+    networks:
+      - example_project
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_USER=lam
+      - MYSQL_PASSWORD=lam
+      - MYSQL_DATABASE=example_project
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+  # redis:
+  #   image: 'redis'
+  #   restart: 'always'
+  #   networks:
+  #     - example_project
+  #   ports:
+  #     - "6379:6379"
+
+networks:
+  example_project:
+    driver: bridge

@@ -3,6 +3,11 @@
 /node_modules
 /build
 
+# Some other file and folder
+package-lock.json
+/upload
+/assets
+
 # Logs
 logs
 *.log
