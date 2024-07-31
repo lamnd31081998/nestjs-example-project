@@ -12,13 +12,13 @@ services:
       - MYSQL_PASSWORD=lam
       - MYSQL_DATABASE=example_project
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
-  # redis:
-  #   image: 'redis'
-  #   restart: 'always'
-  #   networks:
-  #     - example_project
-  #   ports:
-  #     - "6379:6379"
+  redis:
+    image: 'redis'
+    restart: 'always'
+    networks:
+      - example_project
+    ports:
+      - "6379:6379"
 
 networks:
   example_project:
