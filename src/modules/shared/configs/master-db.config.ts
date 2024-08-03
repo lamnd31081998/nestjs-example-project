@@ -1,5 +1,7 @@
+import { Injectable } from "@nestjs/common";
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
 
+@Injectable()
 export class MasterDBConfig implements TypeOrmOptionsFactory {
     constructor() { }
 

@@ -38,9 +38,9 @@ export class AuthController {
     }
 
     @Put('logout')
+    @UseInterceptors(AuthorizationInterceptor)
     @ApiBearerAuth()
     @ApiHeader({ name: 'token', description: 'Bearer Token', required: true })
-    @UseInterceptors(AuthorizationInterceptor)
     @ApiUnauthorizedResponse()
     @ApiForbiddenResponse()
     @ApiInternalServerErrorResponse()

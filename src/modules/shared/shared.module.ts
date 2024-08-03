@@ -8,6 +8,10 @@ import { MasterDBConfig } from "./configs/master-db.config";
 import { CacheConfig } from "./configs/cache.config";
 import { JwtConfig } from "./configs/jwt.config";
 import { UserEntity } from "../user/user.entity";
+import { MulterModule } from "@nestjs/platform-express";
+import { MulterConfig } from "./configs/multer.config";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { ServeStaticConfig } from "./configs/serve-static.config";
 
 @Module({
     imports: [
@@ -22,6 +26,16 @@ import { UserEntity } from "../user/user.entity";
         /* CACHE */
         CacheModule.registerAsync({
             useClass: CacheConfig
+        }),
+
+        /* MULTER */
+        MulterModule.registerAsync({
+            useClass: MulterConfig
+        }),
+
+        /* SERVE STATIC */
+        ServeStaticModule.forRootAsync({
+            useClass: ServeStaticConfig
         }),
 
         /* MASTER DB */
@@ -42,7 +56,9 @@ import { UserEntity } from "../user/user.entity";
         ConfigModule,
         JwtModule,
         CacheModule,
-        TypeOrmModule
+        TypeOrmModule,
+        MulterModule,
+        ServeStaticModule
     ]
 })
 
