@@ -1,9 +1,9 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { AuthLoginDto, AuthRegisterDto } from "src/dtos/auth.dto";
-import { UserInterface, UserStatus } from "src/interfaces/user.interface";
-import { UserRepo } from "src/repositories/user.repository";
 import * as bcrypt from "bcrypt";
-import { TokenService } from "./shared/token.service";
+import { TokenService } from "../shared/services/token.service";
+import { AuthLoginDto, AuthRegisterDto } from "./auth.dto";
+import { UserRepo } from "../user/user.repository";
+import { UserInterface, UserStatus } from "../user/user.interface";
 
 @Injectable()
 export class AuthService {
@@ -38,7 +38,7 @@ export class AuthService {
             let insertData: UserInterface = {
                 ...payload
             };
-            user = await this.userRepo.create(insertData);
+            user = await this.userRepo.save(insertData);
 
             return {
                 status: HttpStatus.CREATED,
@@ -71,7 +71,7 @@ export class AuthService {
             }
 
             //Step 2: Check password
-            if (bcrypt.compareSync(payload.password, user.password)) {
+            if (!bcrypt.compareSync(payload.password, user.password)) {
                 return {
                     status: HttpStatus.BAD_REQUEST,
                     message: 'Password is incorrect',
@@ -81,12 +81,6 @@ export class AuthService {
 
             //Step 3: Gen access_token
             let access_token = await this.tokenService.create(user);
-
-            //Step 4: Update status user
-            let updateData: any = {
-                status: UserStatus.ONLINE
-            };
-            this.userRepo.updateById(user.id, updateData);
 
             return {
                 status: HttpStatus.OK,
@@ -115,7 +109,7 @@ export class AuthService {
             this.tokenService.deleteByToken(tokenInfo.access_token);
 
             //Update status user
-            this.userRepo.updateById(tokenInfo.user.id, { status: UserStatus.OFFLINE });
+            this.userRepo.save({ id: tokenInfo.user.id, status: UserStatus.OFFLINE });
 
             return {
                 status: HttpStatus.OK,

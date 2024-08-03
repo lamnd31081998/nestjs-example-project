@@ -1,6 +1,6 @@
-import { UserStatus } from "src/interfaces/user.interface";
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import * as bcrypt from "bcrypt"
+import { UserStatus } from "./user.interface";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -22,8 +22,11 @@ export class UserEntity {
     @Column({ type: 'varchar', nullable: true })
     avatar_url: string
 
-    @Column({ type: 'int', nullable: true, enum: UserStatus, default: UserStatus.OFFLINE })
+    @Column({ type: 'enum', nullable: true, enum: UserStatus, default: UserStatus.OFFLINE })
     status: number
+
+    @Column({ type: "timestamp", nullable: true })
+    last_active: Date
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     created_at: Date
@@ -31,7 +34,7 @@ export class UserEntity {
     @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
     updated_at: Date
 
-    @DeleteDateColumn()
+    @DeleteDateColumn({ type: "timestamp", nullable: true })
     deleted_at: Date
 
     @BeforeInsert()

@@ -11,9 +11,11 @@ export class MasterDBConfig implements TypeOrmOptionsFactory {
             port: Number(process.env.MASTER_DB_PORT),
             username: process.env.MASTER_DB_USERNAME,
             password: process.env.MASTER_DB_PASSWORD,
-            database: process.env.MASTER_DB_DATABASE,
+            database: process.env.MASTER_DB_NAME,
             retryDelay: 15,
-            retryAttempts: 3
+            retryAttempts: 3,
+            synchronize: true,
+            autoLoadEntities: true
         };
     }
 }
