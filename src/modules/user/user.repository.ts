@@ -19,11 +19,18 @@ export class UserRepo {
     }
 
     async save(saveData: any): Promise<UserInterface> {
-        let current_user: UserInterface = null;
-        if (saveData?.id) current_user = await this.findById(saveData.id);
+        let dataToSave: UserInterface = null;
+        if (saveData?.id) {
+            //@ts-ignore
+            dataToSave = this.userModel.create(saveData);
+        }
+        else {
+            let user: UserInterface = await this.findByUsername(saveData.username);
+            //@ts-ignore
+            dataToSave = this.userModel.create({ ...user, ...saveData });
+            if (dataToSave?.password && !saveData?.password) delete dataToSave.password;
+        }
         
-        //@ts-ignore
-        let dataToSave: UserInterface = this.userModel.create({ ...current_user, ...saveData });
         return this.userModel.save(dataToSave);
     }
 }

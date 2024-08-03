@@ -1,16 +1,15 @@
-import { HttpException, HttpStatus, NestMiddleware } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NestMiddleware } from "@nestjs/common";
 import { UserRepo } from "src/modules/user/user.repository";
 import { UserInterface } from "src/modules/user/user.interface";
 import * as moment from "moment";
 import { TokenService } from "../services/token.service";
 
+@Injectable()
 export class AuthorizationMiddleWare implements NestMiddleware {
     constructor(
         private readonly tokenService: TokenService,
-        private readonly userRepo: UserRepo
-    ) {
-        console.log(this.tokenService)
-    }
+        private readonly userRepo: UserRepo,
+    ) {}
 
     async use(req: any, res: any, next: (error?: Error | any) => void) {
         //Check authorization header
